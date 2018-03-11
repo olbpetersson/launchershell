@@ -1,67 +1,78 @@
 package se.olapetersson.launchersh
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import se.olapetersson.launchersh.commands.LaunchAppCommand
-import se.olapetersson.launchersh.commands.ListAppsCommand
+import android.widget.LinearLayout
+import se.olapetersson.launchersh.commands.Commands
+import se.olapetersson.launchersh.events.Event
+import se.olapetersson.launchersh.events.EventAdapter
 
 
 class LauncherShell : Activity() {
     //Check is this is possible to do with DI/dagger
-    private val availableCommands = listOf(ListAppsCommand(), LaunchAppCommand())
+    private val availableCommands = Commands.availableCommands
+    private lateinit var eventAdapter: EventAdapter
+    private lateinit var eventeRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        // listApps()
+        setupRecyclerView()
         setUpEditText()
     }
 
-    fun setUpEditText() {
+    private fun setUpEditText() {
         val editText = findViewById<EditText>(R.id.input) as EditText
-        /*  editText.setOnKeyListener{ view, _, _ ->
-              var affectedEditText = view as EditText
-              val inputString = affectedEditText.text.trim().toString()
-              Log.i"LaunherShell, "wappapapap $inputString")
-              if (inputString.startsWith("./")) {
-                  if(appExists(inputString.replace("./",""))) {
-                      //TODO: Update to correct colors
-                      affectedEditText.setTextColor(Color.GREEN)
-                  } else {
-                      affectedEditText.setTextColor(Color.RED)
-                  }
-              }
-              true
-          }*/
+        editText.setOnKeyListener { view, _, _ ->
+            val affectedEditText = view as EditText
+            val inputString = affectedEditText.text.trim().toString()
+            val foundAValidCommand = availableCommands.any{ cmd -> cmd.isValid(this, inputString) }
+            affectedEditText.setTextColor(if(foundAValidCommand) Color.GREEN else Color.RED)
 
+            true
+        }
 
         editText.setOnEditorActionListener { view, actionId, event ->
-            Log.i("LaunherShell", "Listener was called with '$actionId'")
             val inputString = view.text.trim().toString()
             if (actionId.equals(EditorInfo.IME_ACTION_DONE)) {
                 availableCommands.forEach { cmd ->
-                    Log.i("LaunherShell", "${cmd.getTrigger()} is one of the triggers")
-                    if (inputString.startsWith(cmd.getTrigger())) {
-                        Log.i("LaunherShell", "calling ${cmd.getTrigger()}")
-                        cmd.execute(this, inputString)
+                    when {
+                        inputString.startsWith(cmd.getTrigger()) -> {
+                            val event = cmd.execute(this, inputString)
+                            Log.i("LauncherShell", "${event.presentationText} " +
+                                    "added to events. Current size: ${eventAdapter.events.size}")
+                            addEventToRecyclerView(event)
+                        }
                     }
                 }
-                /*when {
-                    inputString.startsWith("./") -> launchApp(inputString.replace("./", ""))
-                    inputString.equals("ls") -> listApps()
-
-                }*/
-                Log.i("LaunherShell", "The raw string after enter: '$inputString'")
+                Log.d("LauncherShell", "The raw string after enter was hit: '$inputString'")
             }
             view.text = null
             true
         }
+    }
+
+    private fun setupRecyclerView() {
+        eventeRecyclerView = findViewById<RecyclerView>(R.id.appListRecyclerView)
+        eventeRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+
+        eventAdapter = EventAdapter()
+
+        eventeRecyclerView.adapter = eventAdapter
+    }
+
+    private fun addEventToRecyclerView(event: Event) {
+        eventAdapter.events.add(event)
+        eventAdapter.notifyDataSetChanged()
+        eventeRecyclerView.smoothScrollToPosition(eventAdapter.events.size-1)
     }
 
 }

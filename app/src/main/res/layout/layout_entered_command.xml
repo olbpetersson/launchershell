@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="@color/black_overlay"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <include
+        android:id="@+id/userAtPlaceLabel"
+        layout="@layout/layout_cli_info" />
+
+    <TextView
+        android:id="@+id/enteredCommandCrocGap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=">"
+        android:textColor="#F5F5F5"
+        android:fontFamily="monospace"
+        android:layout_marginRight="5dp"
+        android:layout_below="@id/userAtPlaceLabel"
+        />
+    <TextView
+        android:id="@+id/commandPresentationText"
+        android:maxLines="500"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:singleLine="false"
+        android:text="presentation\ntext"
+        android:fontFamily="monospace"
+        android:layout_below="@id/enteredCommandCrocGap"
+        android:background="@android:color/transparent"
+        android:textColor="#C3D82C"
+        />
+</RelativeLayout>

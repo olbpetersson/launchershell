@@ -1,9 +1,9 @@
 package se.olapetersson.launchersh.commands
 
 import android.content.Context
-import android.util.Log
 import se.olapetersson.launchersh.commands.AppCommandHelper.getResolveInfos
 import se.olapetersson.launchersh.commands.AppCommandHelper.resolveInfoToAppLabel
+import se.olapetersson.launchersh.events.Event
 
 class ListAppsCommand : Command {
     private val TRIGGER = "ls"
@@ -12,22 +12,25 @@ class ListAppsCommand : Command {
         return TRIGGER
     }
 
-    override fun execute(context: Context, rawInput: String) {
-        listApps(context)
+    override fun execute(context: Context, rawInput: String): Event {
+        val appNames = getAppLabels(context)
+        return Event(this, appNames.joinToString("\r\n"))
     }
 
-    fun listApps(context: Context) {
-        Log.i("", "-------------")
-        var packageManager = context.packageManager
-        val pgkAppsList = getResolveInfos(packageManager)!!.map { resolveInfo ->
+    override fun getHelpText(): String {
+        return "list all your installed applications"
+    }
+
+    override fun isValid(context: Context, rawInput: String): Boolean {
+        return rawInput == TRIGGER
+    }
+
+    private fun getAppLabels(context: Context): List<String> {
+        val packageManager = context.packageManager
+        val apps = getResolveInfos(packageManager)!!.map { resolveInfo ->
             resolveInfoToAppLabel(resolveInfo, packageManager)
         }
-        pgkAppsList!!.forEach({ app ->
-            Log.i("MainLauncher", app)
-
-        })
-        Log.i("", "-------------")
-
+        return apps
     }
 
 }

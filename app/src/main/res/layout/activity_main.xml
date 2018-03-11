@@ -10,12 +10,14 @@
     >
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/app_list"
+        android:id="@+id/appListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/layoutInputSegment"
         android:scrollbars="vertical"
     />
     <RelativeLayout
+        android:id="@+id/layoutInputSegment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
@@ -40,7 +42,7 @@
             android:layout_height="wrap_content"
             android:hint=""
             android:textSize="14sp"
-            android:text="./chrome"
+            android:text=""
             android:inputType="text"
             android:fontFamily="monospace"
             android:layout_toRightOf="@id/crocodileGap"

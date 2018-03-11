@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo
 import android.util.Log
 import se.olapetersson.launchersh.commands.AppCommandHelper.getResolveInfos
 import se.olapetersson.launchersh.commands.AppCommandHelper.resolveInfoToAppLabel
+import se.olapetersson.launchersh.events.Event
 
 class LaunchAppCommand : Command {
 
@@ -17,13 +18,27 @@ class LaunchAppCommand : Command {
         return TRIGGER
     }
 
-    override fun execute(context: Context, rawInput: String) {
-        val appName = rawInput.replace("./", "");
+    override fun execute(context: Context, rawInput: String): Event {
+        val appName = trimTrigger(rawInput)
         Log.i("LauncherShell", "Received ${rawInput} and will search for app ${appName}")
         if (appExists(appName, context.packageManager)) {
             launchApp(appName, context)
         }
 
+        return Event(this, "${appName} launched")
+    }
+
+    override fun getHelpText(): String {
+        return "opens an application by writing '${TRIGGER}<appName>'"
+    }
+
+    override fun isValid(context: Context, rawInput: String): Boolean {
+        return appExists(trimTrigger(rawInput), context.packageManager)
+
+    }
+
+    private fun trimTrigger(rawInput: String): String {
+        return rawInput.replace(TRIGGER, "")
     }
 
     private fun appExists(appName: String, packageManager: PackageManager): Boolean {
