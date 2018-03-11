@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/ownerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ola"
+        android:fontFamily="monospace"
+        android:layout_marginRight="10dp"
+        android:textColor="#FF443E"
+        />
+    <TextView
+        android:id="@+id/atLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="in"
+        android:textColor="#F5F5F5"
+        android:fontFamily="monospace"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/ownerLabel"
+        />
+    <TextView
+        android:id="@+id/currentDirLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="~"
+        android:textColor="#FFC135"
+        android:fontFamily="monospace"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/atLabel"
+        />
+
+</LinearLayout>

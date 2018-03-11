@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#000000"
+    tools:context=".LauncherShell"
+    >
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/app_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+    />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <include
+            android:id="@+id/inputLayout"
+            layout="@layout/layout_cli_info">
+        </include>
+
+        <TextView
+            android:id="@+id/crocodileGap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=">"
+            android:textColor="#F5F5F5"
+            android:fontFamily="monospace"
+            android:layout_marginRight="5dp"
+            android:layout_below="@id/inputLayout"
+            />
+        <EditText
+            android:id="@+id/input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint=""
+            android:textSize="14sp"
+            android:text="./chrome"
+            android:inputType="text"
+            android:fontFamily="monospace"
+            android:layout_toRightOf="@id/crocodileGap"
+            android:layout_below="@id/inputLayout"
+            android:background="@android:color/transparent"
+            android:textColor="#C3D82C"
+            android:imeOptions="actionDone"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>
